@@ -9,10 +9,17 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select, WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.service import Service
 import time
 
 # Initialize the Chrome WebDriver
-driver = webdriver.Chrome()
+service = Service(ChromeDriverManager().install())
+options = webdriver.ChromeOptions()
+options.add_argument("--headless")
+options.add_argument("--no-sandbox")
+options.add_argument("--disable-dev-shm-usage")
+driver = webdriver.Chrome(service=service, options=options)
 
 try:
     # Navigate to a webpage
@@ -21,177 +28,139 @@ try:
     # ===== FINDING ELEMENTS =====
     # Multiple ways to locate elements:
     
-    # By ID
-    element = driver.find_element(By.ID, "username")
+    try:
+        # By ID
+        element = driver.find_element(By.ID, "username")
+        print("✓ Found element by ID")
+    except:
+        print("✗ No element with ID 'username'")
     
-    # By Name
-    element = driver.find_element(By.NAME, "email")
+    try:
+        # By Name
+        element = driver.find_element(By.NAME, "email")
+        print("✓ Found element by Name")
+    except:
+        print("✗ No element with Name 'email'")
     
-    # By Class Name
-    element = driver.find_element(By.CLASS_NAME, "submit-button")
+    try:
+        # By Class Name
+        element = driver.find_element(By.CLASS_NAME, "submit-button")
+        print("✓ Found element by Class Name")
+    except:
+        print("✗ No element with Class 'submit-button'")
     
-    # By CSS Selector
-    element = driver.find_element(By.CSS_SELECTOR, "div.container > input[type='text']")
+    try:
+        # By CSS Selector
+        element = driver.find_element(By.CSS_SELECTOR, "div.container > input[type='text']")
+        print("✓ Found element by CSS Selector")
+    except:
+        print("✗ No element matching CSS selector")
     
-    # By XPath
-    element = driver.find_element(By.XPATH, "//button[@id='submit']")
+    try:
+        # By XPath
+        element = driver.find_element(By.XPATH, "//button[@id='submit']")
+        print("✓ Found element by XPath")
+    except:
+        print("✗ No element matching XPath")
     
-    # By Link Text
-    element = driver.find_element(By.LINK_TEXT, "Click Here")
+    try:
+        # By Link Text
+        element = driver.find_element(By.LINK_TEXT, "Click Here")
+        print("✓ Found element by Link Text")
+    except:
+        print("✗ No link with text 'Click Here'")
     
-    # By Partial Link Text
-    element = driver.find_element(By.PARTIAL_LINK_TEXT, "Click")
+    try:
+        # By Partial Link Text
+        element = driver.find_element(By.PARTIAL_LINK_TEXT, "Click")
+        print("✓ Found element by Partial Link Text")
+    except:
+        print("✗ No link containing 'Click'")
     
     
     # ===== INTERACTING WITH ELEMENTS =====
     
-    # 1. TYPING TEXT INTO INPUT FIELDS
-    search_box = driver.find_element(By.NAME, "search")
-    search_box.send_keys("Selenium tutorial")  # Type text
-    search_box.send_keys(Keys.RETURN)  # Press Enter key
-    
-    # Clear existing text before typing
-    search_box.clear()
-    search_box.send_keys("New search query")
-    
-    
-    # 2. CLICKING ELEMENTS
-    button = driver.find_element(By.ID, "submit-btn")
-    button.click()
-    
-    # Click a link
-    link = driver.find_element(By.LINK_TEXT, "About Us")
-    link.click()
+    try:
+        # 1. TYPING TEXT INTO INPUT FIELDS
+        search_box = driver.find_element(By.NAME, "search")
+        search_box.send_keys("Selenium tutorial")  # Type text
+        search_box.send_keys(Keys.RETURN)  # Press Enter key
+        print("✓ Successfully typed in search box")
+    except:
+        print("✗ Could not interact with search box")
     
     
-    # 3. DROPDOWN/SELECT ELEMENTS
-    dropdown = Select(driver.find_element(By.ID, "country-select"))
-    
-    # Select by visible text
-    dropdown.select_by_visible_text("United States")
-    
-    # Select by value attribute
-    dropdown.select_by_value("us")
-    
-    # Select by index (0-based)
-    dropdown.select_by_index(2)
-    
-    # Get all options
-    all_options = dropdown.options
-    for option in all_options:
-        print(option.text)
-    
-    
-    # 4. CHECKBOXES AND RADIO BUTTONS
-    checkbox = driver.find_element(By.ID, "terms-checkbox")
-    
-    # Check if already selected
-    if not checkbox.is_selected():
-        checkbox.click()  # Check the box
-    
-    # Radio button
-    radio = driver.find_element(By.ID, "payment-method-credit")
-    radio.click()
-    
-    
-    # 5. EXTRACTING INFORMATION
-    # Get text content
-    heading = driver.find_element(By.TAG_NAME, "h1")
-    print(f"Heading text: {heading.text}")
-    
-    # Get attribute value
-    link = driver.find_element(By.ID, "home-link")
-    href = link.get_attribute("href")
-    print(f"Link URL: {href}")
-    
-    # Get CSS property
-    color = heading.value_of_css_property("color")
-    print(f"Heading color: {color}")
-    
-    # Check if element is displayed/enabled
-    if button.is_displayed() and button.is_enabled():
+    try:
+        # 2. CLICKING ELEMENTS
+        button = driver.find_element(By.ID, "submit-btn")
         button.click()
+        print("✓ Successfully clicked button")
+    except:
+        print("✗ Could not click button")
+    
+    try:
+        # Click a link
+        link = driver.find_element(By.LINK_TEXT, "About Us")
+        link.click()
+        print("✓ Successfully clicked link")
+    except:
+        print("✗ Could not click link")
+    
+    try:
+        # 3. DROPDOWN/SELECT ELEMENTS
+        dropdown = Select(driver.find_element(By.ID, "country-select"))
+        dropdown.select_by_visible_text("United States")
+        print("✓ Successfully selected dropdown option")
+    except:
+        print("✗ Could not interact with dropdown")
+    
+    try:
+        # 4. CHECKBOXES AND RADIO BUTTONS
+        checkbox = driver.find_element(By.ID, "terms-checkbox")
+        if not checkbox.is_selected():
+            checkbox.click()
+        print("✓ Successfully interacted with checkbox")
+    except:
+        print("✗ Could not interact with checkbox")
+    
+    try:
+        # 5. EXTRACTING INFORMATION
+        heading = driver.find_element(By.TAG_NAME, "h1")
+        print(f"✓ Found heading: {heading.text}")
+    except:
+        print("✗ Could not find heading")
+    
+    try:
+        # Get attribute value
+        link = driver.find_element(By.ID, "home-link")
+        href = link.get_attribute("href")
+        print(f"✓ Found link URL: {href}")
+    except:
+        print("✗ Could not get link attribute")
     
     
-    # 6. WAITING FOR ELEMENTS (Important for dynamic pages)
-    # Explicit wait - wait up to 10 seconds for element to be clickable
-    wait = WebDriverWait(driver, 10)
-    clickable_button = wait.until(
-        EC.element_to_be_clickable((By.ID, "dynamic-button"))
-    )
-    clickable_button.click()
+    try:
+        # 6. HANDLING MULTIPLE ELEMENTS
+        all_links = driver.find_elements(By.TAG_NAME, "a")
+        print(f"✓ Found {len(all_links)} links on the page")
+        for i, link in enumerate(all_links[:3]):  # Show first 3
+            print(f"  Link {i+1}: {link.text[:50]}")
+    except:
+        print("✗ Could not find links")
     
-    # Wait for element to be visible
-    visible_element = wait.until(
-        EC.visibility_of_element_located((By.CLASS_NAME, "popup"))
-    )
+    try:
+        # 7. SCROLLING
+        driver.execute_script("window.scrollBy(0, 500);")
+        print("✓ Successfully scrolled page")
+    except:
+        print("✗ Could not scroll page")
     
-    
-    # 7. ADVANCED INTERACTIONS (ActionChains)
-    actions = ActionChains(driver)
-    
-    # Hover over an element
-    menu = driver.find_element(By.ID, "main-menu")
-    actions.move_to_element(menu).perform()
-    
-    # Right-click (context click)
-    element = driver.find_element(By.ID, "context-menu-target")
-    actions.context_click(element).perform()
-    
-    # Double-click
-    actions.double_click(element).perform()
-    
-    # Drag and drop
-    source = driver.find_element(By.ID, "draggable")
-    target = driver.find_element(By.ID, "droppable")
-    actions.drag_and_drop(source, target).perform()
-    
-    # Chain multiple actions
-    actions.move_to_element(menu).click().send_keys("text").perform()
-    
-    
-    # 8. HANDLING MULTIPLE ELEMENTS
-    # Find all matching elements
-    all_links = driver.find_elements(By.TAG_NAME, "a")
-    
-    for link in all_links:
-        print(f"Link: {link.text} -> {link.get_attribute('href')}")
-    
-    
-    # 9. SWITCHING BETWEEN FRAMES/IFRAMES
-    # Switch to iframe by name or id
-    driver.switch_to.frame("iframe-name")
-    
-    # Interact with elements inside iframe
-    iframe_button = driver.find_element(By.ID, "iframe-button")
-    iframe_button.click()
-    
-    # Switch back to main content
-    driver.switch_to.default_content()
-    
-    
-    # 10. HANDLING ALERTS/POPUPS
-    # Click something that triggers an alert
-    alert_button = driver.find_element(By.ID, "alert-button")
-    alert_button.click()
-    
-    # Wait for alert and switch to it
-    alert = wait.until(EC.alert_is_present())
-    
-    # Get alert text
-    print(f"Alert text: {alert.text}")
-    
-    # Accept alert (click OK)
-    alert.accept()
-    
-    # Or dismiss alert (click Cancel)
-    # alert.dismiss()
-    
-    
-    # 11. SCROLLING
-    # Scroll to element
-    element = driver.find_element(By.ID, "footer")
-    driver.execute_script("arguments[0].scrollIntoView();", element)
+    try:
+        # 8. TAKING SCREENSHOTS
+        driver.save_screenshot("screenshot.png")
+        print("✓ Screenshot saved as 'screenshot.png'")
+    except:
+        print("✗ Could not take screenshot")
     
     # Scroll to bottom of page
     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
@@ -204,8 +173,12 @@ try:
     driver.save_screenshot("screenshot.png")
     
     # Screenshot of specific element
-    element = driver.find_element(By.ID, "content")
-    element.screenshot("element_screenshot.png")
+    try:
+        element = driver.find_element(By.ID, "content")
+        element.screenshot("element_screenshot.png")
+        print("✓ Element screenshot saved")
+    except:
+        print("✗ Could not take element screenshot")
     
 
 finally:
@@ -219,7 +192,12 @@ def login_example():
     """
     Complete example: Filling and submitting a login form
     """
-    driver = webdriver.Chrome()
+    service = Service(ChromeDriverManager().install())
+    options = webdriver.ChromeOptions()
+    options.add_argument("--headless")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    driver = webdriver.Chrome(service=service, options=options)
     
     try:
         # Navigate to login page
@@ -256,7 +234,12 @@ def scraping_example():
     """
     Example: Scraping product information from a page
     """
-    driver = webdriver.Chrome()
+    service = Service(ChromeDriverManager().install())
+    options = webdriver.ChromeOptions()
+    options.add_argument("--headless")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    driver = webdriver.Chrome(service=service, options=options)
     
     try:
         driver.get("https://example.com/products")
